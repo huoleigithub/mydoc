@@ -1,0 +1,166 @@
+version: "3.7"
+services:
+
+  nginx:
+    hostname: nginx
+    container_name: nginx
+    image: nginx
+    volumes:
+    - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+    - ./nginx/log:/var/log/nginx
+    - ./nginx/html:/html
+    ports:
+    - "88:88"
+    restart: "no"
+
+  nacos1:
+    hostname: nacos1
+    container_name: nacos1
+    image: nacos/nacos-server:v2.2.0
+    volumes:
+    - ./nacos/nacos-logs/nacos1:/home/nacos/logs
+    ports:
+    - "8848:8848"
+    - "9848:9848"
+    - "9555:9555"
+    env_file:
+      - ./env/nacos-hostname.env
+    restart: "no"
+    depends_on:
+      mysql_master:
+        condition: service_healthy
+
+  nacos2:
+    hostname: nacos2
+    container_name: nacos2
+    image: nacos/nacos-server:v2.2.0
+    volumes:
+    - ./nacos/nacos-logs/nacos2:/home/nacos/logs
+    ports:
+      - "8849:8848"
+      - "9849:9848"
+    env_file:
+      - ./env/nacos-hostname.env
+    restart: "no"
+    depends_on:
+      mysql_master:
+        condition: service_healthy
+
+  nacos3:
+    hostname: nacos3
+    container_name: nacos3
+    image: nacos/nacos-server:v2.2.0
+    volumes:
+    - ./nacos/nacos-logs/nacos3:/home/nacos/logs
+    ports:
+      - "8850:8848"
+      - "9850:9848"
+    env_file:
+      - ./env/nacos-hostname.env
+    restart: "no"
+    depends_on:
+      mysql_master:
+        condition: service_healthy
+
+  mysql_master: &mysql_master
+    container_name: mysql_master
+    build:
+      context: .
+      dockerfile: ./mysql/Dockerfile
+    image: mydoc/mysql:5.7
+    env_file:
+      - ./env/mysql.env
+    #environment:
+      #- KEY_SUFFIX=mysql_master
+    privileged: true
+    volumes:
+      # mha 容器间共享目录
+      - ./mysql/data/share_sshkeys:/root/share_sshkeys
+      # mysql 配置文件
+      - ./mysql/conf/mysql_master.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      # myqsl 工作目录
+      - ./mysql/data/master:/var/lib/mysql
+      # mysql 数据初始化
+      - ./mysql/init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./mysql/init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      # mysql_master 初始化配置
+      - ./mysql/init/mysql_master.sh:/etc/init.d/script/3-mysql_init.sh
+      # 挂载容器启动后要执行的脚本
+      - ./mysql/script:/etc/init.d/script
+    ports:
+      - "3306:3306"
+    # 容器启动后默认执行的命令
+    command: ["--server-id=1"]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  mysql_slave1:
+    # 继承mysql_master的属性
+    <<: *mysql_master
+    env_file:
+      - ./env/mysql.env
+    environment:
+      - KEY_SUFFIX=mysql_slave1
+    container_name: mysql_slave1
+    ports:
+      - "33061:3306"
+    # 启动依赖于 mysql_master
+    depends_on:
+      - mysql_master
+    volumes:
+      - ./mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./mysql/conf/mysql_slave.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./mysql/data/slave1:/var/lib/mysql
+      # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      # mysql_slave 初始化配置
+      - ./mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
+      - ./mysql/script:/etc/init.d/script
+    command: ["--server-id=21"]
+
+  mysql_slave2:
+    <<: *mysql_master
+    env_file:
+      - ./env/mysql.env
+    environment:
+      - KEY_SUFFIX=mysql_slave2
+    container_name: mysql_slave2
+    ports:
+      - "33062:3306"
+    depends_on:
+      - mysql_master
+    volumes:
+      - ./mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./mysql/conf/mysql_slave.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./mysql/data/slave2:/var/lib/mysql
+      # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - ./mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
+      - ./mysql/script:/etc/init.d/script
+    command: ["--server-id=22"]
+
+  mha_manager:
+    image: hooray/mha4mysql-manager
+    environment:
+      - KEY_SUFFIX=mha_manager
+    container_name: mha_manager
+    depends_on:
+      - mysql_master
+      - mysql_slave1
+      - mysql_slave2
+    restart: always
+    volumes:
+      - ./mysql/data/share_sshkeys:/root/share_sshkeys
+      # 挂载mha配置文件
+      - ./mysql/conf/mha_manager.cnf:/etc/mha/mha_manager.cnf
+      # 修复mha无法解析长名称mysql的问题
+      - ./mysql/init/NodeUtil.pm:/usr/share/perl5/MHA/NodeUtil.pm
+      # 挂载mha数据文件
+      - ./mysql/data/mha_manager:/var/log/masterha/
+      - ./mysql/init/mha_manager.sh:/etc/init.d/script/mha_manager.sh
+      - ./mysql/script:/etc/init.d/script
+    # 防止启动后退出
+    entrypoint: "tail -f /dev/null"
