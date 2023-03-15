@@ -1,12 +1,10 @@
-FROM mysql:5.7.40
-COPY ../mysql/mysql-schema.sql /docker-entrypoint-initdb.d/nacos-mysql.sql
-COPY ../mysql/mydoc-user.sql /docker-entrypoint-initdb.d/mydoc-user.sql
-COPY ../mysql/mydoc-document.sql /docker-entrypoint-initdb.d/mydoc-document.sql
-COPY ../mysql/mydoc-api.sql /docker-entrypoint-initdb.d/mydoc-api.sql
+FROM mysql:5.7
+COPY ./deploy/mysql/mysql-docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/
 
-RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/nacos-mysql.sql
-RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/mydoc-user.sql
-RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/mydoc-document.sql
-RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/mydoc-api.sql
+ENV TIME_ZONE=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /etc/timezone
+# 设置配置文件的权限，不然的话 mysqld 会忽略配置文件并打印这样的 warning:
+# mysqld: [Warning] World-writable config file '/etc/mysql/mysql.conf.d/mysql.cnf' is ignored.
+RUN chmod 0644 /etc/mysql/mysql.conf.d/*
 EXPOSE 3306
 CMD ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
