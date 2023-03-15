@@ -1,5 +1,4 @@
 #!/bin/bash
-# author:hooray
 # 启动ssh服务
 service ssh start
 # 生成ssh的key
