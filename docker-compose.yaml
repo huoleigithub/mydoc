@@ -175,6 +175,7 @@ services:
     entrypoint: "tail -f /dev/null"
 
   redis-master:     #自定义服务名
+    hostname: redis-master
     image: redis:6.0.16     #我们所需要运行的镜像，没有的话，会自定为我们下载
     container_name: redis-master  #镜像运行后的容器名，自定义
     ports:
@@ -187,6 +188,7 @@ services:
       - redis-sentinel-1
 
   redis-slave-1:
+    hostname: redis-slave-1
     image: redis:6.0.16
     container_name: redis-slave-1
     ports:
@@ -194,13 +196,14 @@ services:
     volumes:
       - ./deploy/redis/redis-slave-1/conf:/conf
       - ./deploy/redis/redis-slave-1/data:/data
-    command: bash -c "redis-server /conf/redis.conf  --slaveof 127.0.0.1 6379"
+    command: bash -c "redis-server /conf/redis.conf"
     depends_on:
       - redis-master
     networks:
       - redis-sentinel-1
 
   redis-slave-2:
+    hostname: redis-slave-2
     image: redis:6.0.16
     container_name: redis-slave-2
     ports:
@@ -208,21 +211,22 @@ services:
     volumes:
       - ./deploy/redis/redis-slave-2/conf:/conf
       - ./deploy/redis/redis-slave-2/data:/data
-    command: bash -c "redis-server /conf/redis.conf --slaveof 192.168.136.128 6379"
+    command: bash -c "redis-server /conf/redis.conf"
     depends_on:
       - redis-master
     networks:
       - redis-sentinel-1
 
   redis-sentinel-1:
+    hostname: redis-sentinel-1
     image: redis:6.0.16
     container_name: redis-sentinel-1
     ports:
       - 26379:23679
     volumes:
       - ./deploy/redis/redis-sentinel-1/data:/data
-      - ./deploy/redis/redis-sentinel-1:/etc
-    command: bash -c "redis-sentinel /etc/sentinel.conf && chmod 777 /etc/sentinel.conf"
+      - ./deploy/redis/redis-sentinel-1/conf:/etc/conf
+    command: bash -c "redis-sentinel /etc/conf/sentinel.conf && chmod 777 /etc/conf/sentinel.conf"
     depends_on:
       - redis-master
       - redis-slave-1
@@ -231,14 +235,15 @@ services:
       - redis-sentinel-1
 
   redis-sentinel-2:
+    hostname: redis-sentinel-2
     image: redis:6.0.16
     container_name: redis-sentinel-2
     ports:
       - 26380:23679
     volumes:
       - ./deploy/redis/redis-sentinel-2/data:/data
-      - ./deploy/redis/redis-sentinel-2:/etc
-    command: bash -c "redis-sentinel /etc/sentinel.conf && chmod 777 /etc/sentinel.conf"
+      - ./deploy/redis/redis-sentinel-2/conf:/etc/conf
+    command: bash -c "redis-sentinel /etc/conf/sentinel.conf && chmod 777 /etc/conf/sentinel.conf"
     depends_on:
       - redis-master
       - redis-slave-1
