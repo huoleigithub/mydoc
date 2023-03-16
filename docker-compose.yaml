@@ -12,11 +12,18 @@ services:
     ports:
     - "88:88"
     restart: "no"
+    depends_on:
+      - nacos1
+      - nacos2
+      - nacos3
 
-  nacos1:
+  nacos1: &nacos1
     hostname: nacos1
     container_name: nacos1
-    image: nacos/nacos-server:v2.2.0
+    build:
+      context: .
+      dockerfile: deploy/nacos/Dockerfile
+    image: mydoc/nacos-server:v2.2.0
     volumes:
     - ./deploy/nacos/nacos-logs/nacos1:/home/nacos/logs
     ports:
@@ -31,9 +38,9 @@ services:
         condition: service_healthy
 
   nacos2:
+    <<: *nacos1
     hostname: nacos2
     container_name: nacos2
-    image: nacos/nacos-server:v2.2.0
     volumes:
     - ./deploy/nacos/nacos-logs/nacos2:/home/nacos/logs
     ports:
@@ -47,9 +54,9 @@ services:
         condition: service_healthy
 
   nacos3:
+    <<: *nacos1
     hostname: nacos3
     container_name: nacos3
-    image: nacos/nacos-server:v2.2.0
     volumes:
     - ./deploy/nacos/nacos-logs/nacos3:/home/nacos/logs
     ports:
