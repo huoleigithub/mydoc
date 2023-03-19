@@ -4,8 +4,6 @@ echo ">>>>start to init slave"
 
 set -e
 
-
-
 # 查看主服务器的状态
 MASTER_STATUS=$(MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u root -h '172.25.0.201' -e "show master status\G")
 
