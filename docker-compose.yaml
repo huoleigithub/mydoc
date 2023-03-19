@@ -70,6 +70,7 @@ services:
         condition: service_healthy
 
   mysql_master: &mysql_master
+    hostname: mysql_master
     container_name: mysql_master
     build:
       context: .
@@ -100,6 +101,9 @@ services:
     command: ["--server-id=1"]
     # macbook M1芯片的小伙伴，需要加上下面platform
     platform: linux/x86_64
+    networks:
+      mydoc-net:
+        ipv4_address: 172.25.0.201
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
@@ -129,6 +133,9 @@ services:
       - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
       - ./deploy/mysql/script:/etc/init.d/script
     command: ["--server-id=21"]
+    networks:
+      mydoc-net:
+        ipv4_address: 172.25.0.202
 
   mysql_slave2:
     <<: *mysql_master
@@ -150,6 +157,9 @@ services:
       - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
       - ./deploy/mysql/script:/etc/init.d/script
     command: ["--server-id=22"]
+    networks:
+      mydoc-net:
+        ipv4_address: 172.25.0.203
 
   mha_manager:
     image: hooray/mha4mysql-manager
@@ -173,6 +183,9 @@ services:
       - ./deploy/mysql/script:/etc/init.d/script
     # 防止启动后退出
     entrypoint: "tail -f /dev/null"
+    networks:
+      mydoc-net:
+        ipv4_address: 172.25.0.204
 
   redis-master: &redis-master    #自定义服务名
     image: redis:6.0.16     #我们所需要运行的镜像，没有的话，会自定为我们下载
@@ -184,7 +197,7 @@ services:
       - ./deploy/redis/redis-master/data:/data
     command: bash -c "redis-server /conf/redis.conf"  #容器启动后，运行的命令
     networks:
-      redis-replication:
+      mydoc-net:
         ipv4_address: 172.25.0.101
 
   redis-slave-1:
@@ -200,7 +213,7 @@ services:
     depends_on:
       - redis-master
     networks:
-      redis-replication:
+      mydoc-net:
         ipv4_address: 172.25.0.102
 
   redis-slave-2:
@@ -216,7 +229,7 @@ services:
     depends_on:
       - redis-master
     networks:
-      redis-replication:
+      mydoc-net:
         ipv4_address: 172.25.0.103
 
   redis-sentinel-1:
@@ -234,7 +247,7 @@ services:
       - redis-slave-1
       - redis-slave-2
     networks:
-      - redis-replication
+      - mydoc-net
 
   redis-sentinel-2:
     <<: *redis-master
@@ -251,10 +264,10 @@ services:
       - redis-slave-1
       - redis-slave-2
     networks:
-      - redis-replication
+      - mydoc-net
 
 networks:
-  redis-replication:
+  mydoc-net:
     driver: bridge
     ipam:
       config:
