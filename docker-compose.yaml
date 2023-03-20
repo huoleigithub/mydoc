@@ -187,6 +187,27 @@ services:
       mydoc-net:
         ipv4_address: 172.25.0.204
 
+  canal-server:
+    image: canal/canal-server:v1.1.4
+    container_name: canal-server
+    ports:
+      - "11111:11111"
+    environment:
+      - canal.instance.mysql.slaveId=12   # slaveId 不与其他重复即可
+      - canal.auto.scan=true                # 自动扫描
+      - canal.destinations=nly-         #  client 需要指定此 dest
+      - canal.instance.master.address=172.25.0.201:3306   # mysql 地址
+      - canal.instance.dbUsername=admin               # mysql username
+      - canal.instance.dbPassword=admin@adminpassword        # mysql 密码
+    volumes:
+      - ./deploy/canal/conf/:/home/admin/canal-server/conf/
+      - ./deploy/canal/logs/:/home/admin/canal-server/logs/
+    depends_on:
+      - mysql_master
+    networks:
+      mydoc-net:
+        ipv4_address: 172.25.0.111
+
   redis-master: &redis-master    #自定义服务名
     image: redis:6.0.16     #我们所需要运行的镜像，没有的话，会自定为我们下载
     container_name: redis-master  #镜像运行后的容器名，自定义
