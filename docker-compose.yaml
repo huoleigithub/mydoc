@@ -195,15 +195,14 @@ services:
     environment:
       - canal.instance.mysql.slaveId=12   # slaveId 不与其他重复即可
       - canal.auto.scan=true                # 自动扫描
-      - canal.destinations=nly-         #  client 需要指定此 dest
+      - canal.destinations=nly-v1         #  client 需要指定此 dest
       - canal.instance.master.address=172.25.0.201:3306   # mysql 地址
       - canal.instance.dbUsername=admin               # mysql username
-      - canal.instance.dbPassword=admin@adminpassword        # mysql 密码
+      - canal.instance.dbPassword=adminpassword        # mysql 密码
+      - canal.instance.connectionCharset=UTF-8
     volumes:
-      - ./deploy/canal/conf/:/home/admin/canal-server/conf/
-      - ./deploy/canal/logs/:/home/admin/canal-server/logs/
-    depends_on:
-      - mysql_master
+      - ./deploy/canal/conf:/home/admin/canal-server/conf
+      - ./deploy/canal/logs:/home/admin/canal-server/logs
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.111
