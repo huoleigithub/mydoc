@@ -100,7 +100,7 @@ services:
     # 容器启动后默认执行的命令
     command: ["--server-id=1"]
     # macbook M1芯片的小伙伴，需要加上下面platform
-    platform: linux/x86_64
+    # platform: linux/x86_64
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.201
