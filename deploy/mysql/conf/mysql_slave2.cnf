@@ -7,7 +7,7 @@ datadir		= /var/lib/mysql
 #bind-address	= 127.0.0.1
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links=0
-server-id=1
+server-id=22
 
 #字符集设置
 character-set-server=utf8mb4
@@ -26,8 +26,17 @@ binlog-ignore-db=sys
 
 # 中继日志
 relay_log=mysql-relay-bin
+# 只读
+read_only=1
+relay_log_info_repository=TABLE
+relay_log_recovery=ON
+relay_log_purge=0
+
+# 并行复制
+slave-parallel-type=LOGICAL_CLOCK
+slave-parallel-workers=16
+master_info_repository=TABLE
 
 # 自动开启半同步复制
-plugin_load="rpl_semi_sync_master=semisync_master.so"
-rpl_semi_sync_master_enabled=1
-rpl_semi_sync_master_timeout=1000
+plugin_load="rpl_semi_sync_slave=semisync_slave.so"
+rpl_semi_sync_slave_enabled=1
