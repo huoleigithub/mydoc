@@ -83,9 +83,9 @@ services:
     privileged: true
     volumes:
       # mha 容器间共享目录
-      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      # - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
       # mysql 配置文件
-      - ./deploy/mysql/conf/mysql_master.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./deploy/mysql/conf/mysql_master.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
       # myqsl 工作目录
       - ./deploy/mysql/data/master:/var/lib/mysql
       # mysql 数据初始化
@@ -94,11 +94,11 @@ services:
       # mysql_master 初始化配置
       - ./deploy/mysql/init/mysql_master.sh:/etc/init.d/script/3-mysql_init.sh
       # 挂载容器启动后要执行的脚本
-      - ./deploy/mysql/script:/etc/init.d/script
+      # - ./deploy/mysql/script:/etc/init.d/script
+    command: ["sh","/etc/init.d/script/3-mysql_init.sh"]
     ports:
       - "3306:3306"
     # 容器启动后默认执行的命令
-    command: bash -c "chmod 644 /etc/mysql/mysql.conf.d/mysqld.cnf && /entrypoint.sh mysqld"
     # macbook M1芯片的小伙伴，需要加上下面platform
     # platform: linux/x86_64
     networks:
@@ -123,16 +123,16 @@ services:
     # 启动依赖于 mysql_master
     depends_on:
       - mysql_master
-    command: bash -c "chmod 644 /etc/mysql/mysql.conf.d/mysqld.cnf && /entrypoint.sh mysqld"
     volumes:
-      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
-      - ./deploy/mysql/conf/mysql_slave1.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      #- ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./deploy/mysql/conf/mysql_slave1.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
       - ./deploy/mysql/data/slave1:/var/lib/mysql
       # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
       # mysql_slave 初始化配置
       - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
-      - ./deploy/mysql/script:/etc/init.d/script
+      # - ./deploy/mysql/script:/etc/init.d/script
+    command: ["sh","/etc/init.d/script/3-mysql_init.sh"]
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.202
@@ -148,15 +148,15 @@ services:
       - "33062:3306"
     depends_on:
       - mysql_master
-    command: bash -c "chmod 644 /etc/mysql/mysql.conf.d/mysqld.cnf && /entrypoint.sh mysqld"
     volumes:
-      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
-      - ./deploy/mysql/conf/mysql_slave2.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      #- ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./deploy/mysql/conf/mysql_slave2.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
       - ./deploy/mysql/data/slave2:/var/lib/mysql
       # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
       - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
-      - ./deploy/mysql/script:/etc/init.d/script
+      # - ./deploy/mysql/script:/etc/init.d/script
+    command: ["sh","/etc/init.d/script/3-mysql_init.sh"]
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.203

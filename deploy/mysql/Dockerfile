@@ -1,5 +1,6 @@
 FROM mysql:5.7
 COPY ./deploy/mysql/mysql-docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/
+COPY ./deploy/mysql/init/start.sh /root/start.sh
 
 ENV TIME_ZONE=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /etc/timezone
@@ -7,4 +8,4 @@ RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /
 # mysqld: [Warning] World-writable config file '/etc/mysql/mysql.conf.d/mysql.cnf' is ignored.
 RUN chmod 0644 /etc/mysql/mysql.conf.d/mysqld.cnf
 EXPOSE 3306
-CMD ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+CMD ["/bin/bash", "/root/start.sh"]
