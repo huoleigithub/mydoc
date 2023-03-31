@@ -78,12 +78,12 @@ services:
     image: mydoc/mysql:5.7
     env_file:
       - ./deploy/env/mysql.env
-      #environment:
-      #- KEY_SUFFIX=mysql_master
+    environment:
+      - KEY_SUFFIX=mysql_master
     privileged: true
     volumes:
       # mha 容器间共享目录
-      # - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
       # mysql 配置文件
       - ./deploy/mysql/conf/mysql_master.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
       # myqsl 工作目录
@@ -92,15 +92,15 @@ services:
       #- ./deploy/mysql/init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       #- ./deploy/mysql/init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
       # mysql_master 初始化配置
-      - ./deploy/mysql/init/mysql_master.sh:/etc/init.d/script/3-mysql_init.sh
+      - ./deploy/mysql/init/mysql_master.sh:/etc/init.d/init/3-mysql_init.sh
       # 挂载容器启动后要执行的脚本
-      # - ./deploy/mysql/script:/etc/init.d/script
-    command: ["sh","/etc/init.d/script/3-mysql_init.sh"]
+      - ./deploy/mysql/script:/etc/init.d/script
     ports:
       - "3306:3306"
+    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
     # 容器启动后默认执行的命令
     # macbook M1芯片的小伙伴，需要加上下面platform
-    # platform: linux/x86_64
+    platform: linux/x86_64
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.201
@@ -124,15 +124,15 @@ services:
     depends_on:
       - mysql_master
     volumes:
-      #- ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
       - ./deploy/mysql/conf/mysql_slave1.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
       - ./deploy/mysql/data/slave1:/var/lib/mysql
       # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
       # mysql_slave 初始化配置
-      - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
-      # - ./deploy/mysql/script:/etc/init.d/script
-    command: ["sh","/etc/init.d/script/3-mysql_init.sh"]
+      - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
+      - ./deploy/mysql/script:/etc/init.d/script
+    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.202
@@ -149,14 +149,14 @@ services:
     depends_on:
       - mysql_master
     volumes:
-      #- ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
       - ./deploy/mysql/conf/mysql_slave2.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
       - ./deploy/mysql/data/slave2:/var/lib/mysql
       # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
-      - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/script/3-mysql_init.sh
-      # - ./deploy/mysql/script:/etc/init.d/script
-    command: ["sh","/etc/init.d/script/3-mysql_init.sh"]
+      - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
+      - ./deploy/mysql/script:/etc/init.d/script
+    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.203
@@ -170,7 +170,7 @@ services:
       - mysql_master
       - mysql_slave1
       - mysql_slave2
-    restart: always
+    restart: "no"
     volumes:
       - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
       # 挂载mha配置文件
@@ -179,8 +179,9 @@ services:
       - ./deploy/mysql/init/NodeUtil.pm:/usr/share/perl5/MHA/NodeUtil.pm
       # 挂载mha数据文件
       - ./deploy/mysql/data/mha_manager:/var/log/masterha/
-      - ./deploy/mysql/init/mha_manager.sh:/etc/init.d/script/mha_manager.sh
+      - ./deploy/mysql/init/mha_manager.sh:/etc/init.d/mha_manager.sh
       - ./deploy/mysql/script:/etc/init.d/script
+    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh && sh /etc/init.d/script/ssh_auth_keys.sh && sh /etc/init.d/mha_manager.sh"
     # 防止启动后退出
     entrypoint: "tail -f /dev/null"
     networks:
