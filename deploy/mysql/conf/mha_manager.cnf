@@ -11,21 +11,22 @@ repl_password=adminpassword
 ping_interval=1
 
 [server1]
-hostname=mysql_master
+hostname=172.25.0.201
 port=3306
 master_binlog_dir=/var/lib/mysql
-ignore_fail=1
+candidate_master=1
+check_repl_delay=0
 
 [server2]
-hostname=mysql_slave1
-port=33061
+hostname=172.25.0.202
+port=3306
 master_binlog_dir=/var/lib/mysql
 candidate_master=1
 check_repl_delay=0
 
 [server3]
-hostname=mysql_slave2
-port=33062
+hostname=172.25.0.203
+port=3306
 master_binlog_dir=/var/lib/mysql
 candidate_master=1
 check_repl_delay=0
