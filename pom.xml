@@ -17,6 +17,8 @@
     <version>1.0</version>
     <modules>
         <module>user</module>
+        <module>document</module>
+        <module>authority</module>
     </modules>
 
     <properties>
