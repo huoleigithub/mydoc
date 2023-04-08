@@ -105,7 +105,7 @@ services:
       mydoc-net:
         ipv4_address: 172.25.0.201
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "MYSQL_PWD=${MYSQL_ROOT_PASSWORD}", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 10s
       retries: 10
@@ -161,32 +161,32 @@ services:
       mydoc-net:
         ipv4_address: 172.25.0.203
 
-  mha_manager:
-    image: hooray/mha4mysql-manager
-    environment:
-      - KEY_SUFFIX=mha_manager
-    container_name: mha_manager
-    depends_on:
-      - mysql_master
-      - mysql_slave1
-      - mysql_slave2
-    restart: "no"
-    volumes:
-      - ./.deploy/mysql/data/share_sshkeys:/root/share_sshkeys
-      # 挂载mha配置文件
-      - ./.deploy/mysql/conf/mha_manager.cnf:/etc/mha/mha_manager.cnf
-      # 修复mha无法解析长名称mysql的问题
-      - ./.deploy/mysql/init/NodeUtil.pm:/usr/share/perl5/MHA/NodeUtil.pm
-      # 挂载mha数据文件
-      - ./.deploy/mysql/data/mha_manager:/var/log/masterha/
-      - ./.deploy/mysql/init/mha_manager.sh:/etc/init.d/mha_manager.sh
-      - ./.deploy/mysql/script:/etc/init.d/script
-    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh && sh /etc/init.d/script/ssh_auth_keys.sh && sh /etc/init.d/mha_manager.sh"
-    # 防止启动后退出
-    entrypoint: "tail -f /dev/null"
-    networks:
-      mydoc-net:
-        ipv4_address: 172.25.0.204
+#  mha_manager:
+#    image: hooray/mha4mysql-manager
+#    environment:
+#      - KEY_SUFFIX=mha_manager
+#    container_name: mha_manager
+#    depends_on:
+#      - mysql_master
+#      - mysql_slave1
+#      - mysql_slave2
+#    restart: "no"
+#    volumes:
+#      - ./.deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+#      # 挂载mha配置文件
+#      - ./.deploy/mysql/conf/mha_manager.cnf:/etc/mha/mha_manager.cnf
+#      # 修复mha无法解析长名称mysql的问题
+#      - ./.deploy/mysql/init/NodeUtil.pm:/usr/share/perl5/MHA/NodeUtil.pm
+#      # 挂载mha数据文件
+#      - ./.deploy/mysql/data/mha_manager:/var/log/masterha/
+#      - ./.deploy/mysql/init/mha_manager.sh:/etc/init.d/mha_manager.sh
+#      - ./.deploy/mysql/script:/etc/init.d/script
+#    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh && sh /etc/init.d/script/ssh_auth_keys.sh && sh /etc/init.d/mha_manager.sh"
+#    # 防止启动后退出
+#    entrypoint: "tail -f /dev/null"
+#    networks:
+#      mydoc-net:
+#        ipv4_address: 172.25.0.204
 
   canal-server:
     image: canal/canal-server:v1.1.4
