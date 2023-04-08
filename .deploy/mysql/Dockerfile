@@ -1,6 +1,6 @@
 FROM mysql:5.7
-COPY ./deploy/mysql/mysql-docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/
-COPY ./deploy/mysql/init/start.sh /root/start.sh
+COPY ./.deploy/mysql/mysql-docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/
+COPY ./.deploy/mysql/init/start.sh /root/start.sh
 
 ENV TIME_ZONE=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /etc/timezone

@@ -6,9 +6,9 @@ services:
     container_name: nginx
     image: nginx
     volumes:
-      - ./deploy/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./deploy/nginx/log:/var/log/nginx
-      - ./deploy/nginx/html:/html
+      - ./.deploy/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./.deploy/nginx/log:/var/log/nginx
+      - ./.deploy/nginx/html:/html
     ports:
       - "88:88"
     restart: "no"
@@ -22,16 +22,16 @@ services:
     container_name: nacos1
     build:
       context: .
-      dockerfile: deploy/nacos/Dockerfile
+      dockerfile: ./.deploy/nacos/Dockerfile
     image: mydoc/nacos-server:v2.2.0
     volumes:
-      - ./deploy/nacos/nacos-logs/nacos1:/home/nacos/logs
+      - ./.deploy/nacos/nacos-logs/nacos1:/home/nacos/logs
     ports:
       - "8848:8848"
       - "9848:9848"
       - "9555:9555"
     env_file:
-      - deploy/env/nacos-hostname.env
+      - ./.deploy/env/nacos-hostname.env
     restart: "no"
     depends_on:
       mysql_master:
@@ -42,12 +42,12 @@ services:
     hostname: nacos2
     container_name: nacos2
     volumes:
-      - ./deploy/nacos/nacos-logs/nacos2:/home/nacos/logs
+      - ./.deploy/nacos/nacos-logs/nacos2:/home/nacos/logs
     ports:
       - "8849:8848"
       - "9849:9848"
     env_file:
-      - deploy/env/nacos-hostname.env
+      - ./.deploy/env/nacos-hostname.env
     restart: "no"
     depends_on:
       mysql_master:
@@ -58,12 +58,12 @@ services:
     hostname: nacos3
     container_name: nacos3
     volumes:
-      - ./deploy/nacos/nacos-logs/nacos3:/home/nacos/logs
+      - ./.deploy/nacos/nacos-logs/nacos3:/home/nacos/logs
     ports:
       - "8850:8848"
       - "9850:9848"
     env_file:
-      - deploy/env/nacos-hostname.env
+      - ./.deploy/env/nacos-hostname.env
     restart: "no"
     depends_on:
       mysql_master:
@@ -74,27 +74,27 @@ services:
     container_name: mysql_master
     build:
       context: .
-      dockerfile: deploy/mysql/Dockerfile
+      dockerfile: ./.deploy/mysql/Dockerfile
     image: mydoc/mysql:5.7
     env_file:
-      - ./deploy/env/mysql.env
+      - ./.deploy/env/mysql.env
     environment:
       - KEY_SUFFIX=mysql_master
     privileged: true
     volumes:
       # mha 容器间共享目录
-      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./.deploy/mysql/data/share_sshkeys:/root/share_sshkeys
       # mysql 配置文件
-      - ./deploy/mysql/conf/mysql_master.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
+      - ./.deploy/mysql/conf/mysql_master.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
       # myqsl 工作目录
-      - ./deploy/mysql/data/master:/var/lib/mysql
+      - ./.deploy/mysql/data/master:/var/lib/mysql
       # mysql 数据初始化
-      #- ./deploy/mysql/init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
-      #- ./deploy/mysql/init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      #- ./.deploy/mysql/init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      #- ./.deploy/mysql/init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
       # mysql_master 初始化配置
-      - ./deploy/mysql/init/mysql_master.sh:/etc/init.d/init/3-mysql_init.sh
+      - ./.deploy/mysql/init/mysql_master.sh:/etc/init.d/init/3-mysql_init.sh
       # 挂载容器启动后要执行的脚本
-      - ./deploy/mysql/script:/etc/init.d/script
+      - ./.deploy/mysql/script:/etc/init.d/script
     ports:
       - "3306:3306"
     #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
@@ -114,7 +114,7 @@ services:
     # 继承mysql_master的属性
     <<: *mysql_master
     env_file:
-      - deploy/env/mysql.env
+      - ./.deploy/env/mysql.env
     environment:
       - KEY_SUFFIX=mysql_slave1
     container_name: mysql_slave1
@@ -124,14 +124,14 @@ services:
     depends_on:
       - mysql_master
     volumes:
-      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
-      - ./deploy/mysql/conf/mysql_slave1.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
-      - ./deploy/mysql/data/slave1:/var/lib/mysql
+      - ./.deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./.deploy/mysql/conf/mysql_slave1.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
+      - ./.deploy/mysql/data/slave1:/var/lib/mysql
       # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
       # mysql_slave 初始化配置
-      - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
-      - ./deploy/mysql/script:/etc/init.d/script
+      - ./.deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
+      - ./.deploy/mysql/script:/etc/init.d/script
     #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
     networks:
       mydoc-net:
@@ -140,7 +140,7 @@ services:
   mysql_slave2:
     <<: *mysql_master
     env_file:
-      - deploy/env/mysql.env
+      - ./.deploy/env/mysql.env
     environment:
       - KEY_SUFFIX=mysql_slave2
     container_name: mysql_slave2
@@ -149,13 +149,13 @@ services:
     depends_on:
       - mysql_master
     volumes:
-      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
-      - ./deploy/mysql/conf/mysql_slave2.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
-      - ./deploy/mysql/data/slave2:/var/lib/mysql
+      - ./.deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./.deploy/mysql/conf/mysql_slave2.cnf:/etc/mysql/mysql.conf.d/source/mysqld.cnf
+      - ./.deploy/mysql/data/slave2:/var/lib/mysql
       # - ./init/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
-      - ./deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
-      - ./deploy/mysql/script:/etc/init.d/script
+      - ./.deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
+      - ./.deploy/mysql/script:/etc/init.d/script
     #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
     networks:
       mydoc-net:
@@ -172,15 +172,15 @@ services:
       - mysql_slave2
     restart: "no"
     volumes:
-      - ./deploy/mysql/data/share_sshkeys:/root/share_sshkeys
+      - ./.deploy/mysql/data/share_sshkeys:/root/share_sshkeys
       # 挂载mha配置文件
-      - ./deploy/mysql/conf/mha_manager.cnf:/etc/mha/mha_manager.cnf
+      - ./.deploy/mysql/conf/mha_manager.cnf:/etc/mha/mha_manager.cnf
       # 修复mha无法解析长名称mysql的问题
-      - ./deploy/mysql/init/NodeUtil.pm:/usr/share/perl5/MHA/NodeUtil.pm
+      - ./.deploy/mysql/init/NodeUtil.pm:/usr/share/perl5/MHA/NodeUtil.pm
       # 挂载mha数据文件
-      - ./deploy/mysql/data/mha_manager:/var/log/masterha/
-      - ./deploy/mysql/init/mha_manager.sh:/etc/init.d/mha_manager.sh
-      - ./deploy/mysql/script:/etc/init.d/script
+      - ./.deploy/mysql/data/mha_manager:/var/log/masterha/
+      - ./.deploy/mysql/init/mha_manager.sh:/etc/init.d/mha_manager.sh
+      - ./.deploy/mysql/script:/etc/init.d/script
     #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh && sh /etc/init.d/script/ssh_auth_keys.sh && sh /etc/init.d/mha_manager.sh"
     # 防止启动后退出
     entrypoint: "tail -f /dev/null"
@@ -202,8 +202,8 @@ services:
       - canal.instance.dbPassword=adminpassword        # mysql 密码
       - canal.instance.connectionCharset=UTF-8
     volumes:
-      - ./deploy/canal/conf:/home/admin/canal-server/conf
-      - ./deploy/canal/logs:/home/admin/canal-server/logs
+      - ./.deploy/canal/conf:/home/admin/canal-server/conf
+      - ./.deploy/canal/logs:/home/admin/canal-server/logs
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.111
@@ -214,8 +214,8 @@ services:
     ports:
       - 6379:6379           #宿主机的6379映射容器内部的6379端口
     volumes:  #目录挂载 。分号 ： 右边代表容器内部的目录，分号左边表示宿主机的目录，
-      - ./deploy/redis/redis-master/conf:/conf
-      - ./deploy/redis/redis-master/data:/data
+      - ./.deploy/redis/redis-master/conf:/conf
+      - ./.deploy/redis/redis-master/data:/data
     command: bash -c "redis-server /conf/redis.conf"  #容器启动后，运行的命令
     networks:
       mydoc-net:
@@ -228,8 +228,8 @@ services:
     ports:
       - 6380:6379
     volumes:
-      - ./deploy/redis/redis-slave-1/conf:/conf
-      - ./deploy/redis/redis-slave-1/data:/data
+      - ./.deploy/redis/redis-slave-1/conf:/conf
+      - ./.deploy/redis/redis-slave-1/data:/data
     command: bash -c "redis-server /conf/redis.conf"
     depends_on:
       - redis-master
@@ -244,8 +244,8 @@ services:
     ports:
       - 6381:6379
     volumes:
-      - ./deploy/redis/redis-slave-2/conf:/conf
-      - ./deploy/redis/redis-slave-2/data:/data
+      - ./.deploy/redis/redis-slave-2/conf:/conf
+      - ./.deploy/redis/redis-slave-2/data:/data
     command: bash -c "redis-server /conf/redis.conf"
     depends_on:
       - redis-master
@@ -260,8 +260,8 @@ services:
     ports:
       - 26379:23679
     volumes:
-      - ./deploy/redis/redis-sentinel-1/data:/data
-      - ./deploy/redis/redis-sentinel-1/conf:/etc/conf
+      - ./.deploy/redis/redis-sentinel-1/data:/data
+      - ./.deploy/redis/redis-sentinel-1/conf:/etc/conf
     command: bash -c "redis-sentinel /etc/conf/sentinel.conf && chmod 777 /etc/conf/sentinel.conf"
     depends_on:
       - redis-master
@@ -277,8 +277,8 @@ services:
     ports:
       - 26380:23679
     volumes:
-      - ./deploy/redis/redis-sentinel-2/data:/data
-      - ./deploy/redis/redis-sentinel-2/conf:/etc/conf
+      - ./.deploy/redis/redis-sentinel-2/data:/data
+      - ./.deploy/redis/redis-sentinel-2/conf:/etc/conf
     command: bash -c "redis-sentinel /etc/conf/sentinel.conf && chmod 777 /etc/conf/sentinel.conf"
     depends_on:
       - redis-master
@@ -288,22 +288,66 @@ services:
       - mydoc-net
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.1
+    image: elasticsearch:7.17.4
     container_name: elasticsearch
+    restart: "no"
+    volumes:
+      - ./.deploy/elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
+      - ./.deploy/elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
     environment:
       - discovery.type=single-node
+      - cluster.name=elasticsearch
+      - ES_JAVA_OPTS=-Xms1024m -Xmx1024m
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - mydoc-net
+
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.1
+    image: kibana:7.17.4
     container_name: kibana
+    restart: "no"
+    volumes:
+      - ./.deploy/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
-      - 5601:5601
+      - "5601:5601"
     depends_on:
       - elasticsearch
+    links:
+      - elasticsearch:es #可以用es这个域名访问elasticsearch服务
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - elasticsearch.hosts=http://es:9200 #设置访问elasticsearch的地址
+      - I18N_LOCALE=zh-CN
+    networks:
+      - mydoc-net
+
+  logstash:
+    image: logstash:7.17.4
+    container_name: logstash
+    restart: "no"
+    #volumes:
+      #- ./.deploy/logstash/conf:/usr/share/logstash/config
+      #- ./.deploy/logstash/pipeline:/usr/share/logstash/pipeline
+      # - ./.deploy/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+      # - ./.deploy/logstash/logstash-audit.conf:/usr/share/logstash/pipeline/logstash-audit.conf
+      # - ./.deploy/logstash/logstash-user-action.conf:/usr/share/logstash/pipeline/logstash-user-action.conf
+    ports:
+      - '5044:5044'
+      - '50000:50000/tcp'
+      - '50000:50000/udp'
+      - '9600:9600'
+    environment:
+      LS_JAVA_OPTS: -Xms1024m -Xmx1024m
+      TZ: Asia/Shanghai
+      MONITORING_ENABLED: false
+    links:
+      - elasticsearch:es #可以用es这个域名访问elasticsearch服务
+    networks:
+      - mydoc-net
+    depends_on:
+      - elasticsearch
 
 networks:
   mydoc-net:

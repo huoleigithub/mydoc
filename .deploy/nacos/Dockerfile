@@ -38,8 +38,8 @@ RUN yum autoremove -y wget \
 
 
 
-ADD ./deploy/nacos/bin/docker-startup.sh bin/docker-startup.sh
-ADD ./deploy/nacos/conf/application.properties conf/application.properties
+ADD ./.deploy/nacos/bin/docker-startup.sh bin/docker-startup.sh
+ADD ./.deploy/nacos/conf/application.properties conf/application.properties
 
 
 # set startup log dir
