@@ -97,7 +97,7 @@ services:
       - ./.deploy/mysql/script:/etc/init.d/script
     ports:
       - "3306:3306"
-    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
+    #command: bash -c "sh /etc/init.d/init/3-mysql_init.sh && /entrypoint.sh mysqld"
     # 容器启动后默认执行的命令
     # macbook M1芯片的小伙伴，需要加上下面platform
     platform: linux/x86_64
@@ -132,7 +132,7 @@ services:
       # mysql_slave 初始化配置
       - ./.deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
       - ./.deploy/mysql/script:/etc/init.d/script
-    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
+    #command: bash -c "sh /etc/init.d/init/3-mysql_init.sh && /entrypoint.sh mysqld"
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.202
@@ -156,7 +156,7 @@ services:
       # - ./init/data.sql:/docker-entrypoint-initdb.d/2-data.sql
       - ./.deploy/mysql/init/mysql_slave.sh:/etc/init.d/init/3-mysql_init.sh
       - ./.deploy/mysql/script:/etc/init.d/script
-    #command: bash -c "sh /etc/init.d/script/ssh_generate_key.sh /etc/init.d/script/ssh_auth_keys.sh && /entrypoint.sh mysqld"
+    #command: bash -c "sh /etc/init.d/init/3-mysql_init.sh && /entrypoint.sh mysqld"
     networks:
       mydoc-net:
         ipv4_address: 172.25.0.203

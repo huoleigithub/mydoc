@@ -1,6 +1,8 @@
 #!/bin/bash
 echo ">>>>start to init slave"
-set +els no-exit-filewhoami
+set +e
+ls no-exit-file
+whoami
 # 查看主服务器的状态
 MASTER_STATUS=$(MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u root -h '172.25.0.201' -e "show master status\G")
 echo "MASTER_STATUS:${MASTER_STATUS}"
@@ -18,7 +20,7 @@ echo "MYSQL_EXECUTE:${MYSQL_EXECUTE}"
 MYSQL_EXECUTE_STATUE=$(echo "${MYSQL_EXECUTE}" | awk '{print $1}')
 echo "MYSQL_EXECUTE_STATUE:${MYSQL_EXECUTE_STATUE}"
 # 如果设置主节点失败，重新设置
-if [ "${MYSQL_EXECUTE_STATUE}" == "ERROR" ]; then
+if [ "${MYSQL_EXECUTE_STATUE}" = "ERROR" ]; then
   echo "MYSQL_EXECUTE_STATUE:${MYSQL_EXECUTE_STATUE}"
   MYSQL_PWD=${MYSQL_ROOT_PASSWORD} mysql -u root -e "STOP SLAVE FOR CHANNEL ''; RESET SLAVE; CHANGE MASTER TO MASTER_HOST='172.25.0.201', MASTER_USER='${MYSQL_REPLICATION_USER}', MASTER_PASSWORD='${MYSQL_REPLICATION_PASSWORD}', MASTER_LOG_FILE='${MASTER_LOG_FILE}', MASTER_LOG_POS=${MASTER_LOG_POS}; START SLAVE;"
 fi
