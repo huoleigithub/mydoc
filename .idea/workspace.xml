@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fcdfb2bc-fd24-4e3b-b8e2-8ab27d34e4e0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/authority/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/vj/CommonApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/vj/util/SnowflakeIdGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/test/java/com/vj/IdGenerateTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/document/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/vj/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="C:\Users\11455\.m2\repository" />
+        <option name="mavenHome" value="$PROJECT_DIR$/../../Maven/apache-maven-3.6.3" />
+        <option name="userSettingsFile" value="C:\Maven\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2MYSGWRoQ4gnmtkeiDkw5hGgL6B" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "WebServerToolWindowFactoryState": "false",
+    "jdk.selected.JAVA_MODULE": "1.8",
+    "last_opened_file_path": "C:/Project/mydoc/user/src/main/java/com/vj",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.fileTypes",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Project\mydoc\user\src\main\java\com\vj" />
+      <recent name="C:\Project\mydoc\user\src\main\resources" />
+      <recent name="C:\Project\mydoc\document\src\main\resources" />
+      <recent name="C:\Project\mydoc\document\src\main\java\com\vj" />
+      <recent name="C:\Project\mydoc\authority\src\main\resources" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.vj" />
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="deploy/docker-compose.yaml.msyql: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="msyql" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="deploy/docker-compose.yaml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.deploy/docker-compose.yaml.msyql: Compose Deployment" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fcdfb2bc-fd24-4e3b-b8e2-8ab27d34e4e0" name="Default Changelist" comment="" />
+      <created>1677942927350</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1677942927350</updated>
+      <workItem from="1677942931188" duration="2910000" />
+      <workItem from="1678458597834" duration="30000" />
+      <workItem from="1678459134322" duration="1393000" />
+      <workItem from="1678513247658" duration="699000" />
+      <workItem from="1678527406347" duration="568000" />
+      <workItem from="1678535464010" duration="8369000" />
+      <workItem from="1678555294832" duration="62000" />
+      <workItem from="1678555380660" duration="3253000" />
+      <workItem from="1678589432691" duration="18540000" />
+      <workItem from="1678620329661" duration="9823000" />
+      <workItem from="1678709814800" duration="10535000" />
+      <workItem from="1678803188415" duration="4310000" />
+      <workItem from="1678892540246" duration="6435000" />
+      <workItem from="1678980961320" duration="622000" />
+      <workItem from="1678981717204" duration="3668000" />
+      <workItem from="1679324878804" duration="91000" />
+      <workItem from="1679325005278" duration="1000" />
+      <workItem from="1679325026563" duration="8000" />
+      <workItem from="1679325411522" duration="7143000" />
+      <workItem from="1679927490089" duration="11371000" />
+      <workItem from="1680019070410" duration="6859000" />
+      <workItem from="1680533346384" duration="8695000" />
+      <workItem from="1680617570583" duration="8251000" />
+      <workItem from="1680678233397" duration="3924000" />
+      <workItem from="1681144003898" duration="777000" />
+      <workItem from="1681311465258" duration="110000" />
+      <workItem from="1681311587696" duration="8683000" />
+      <workItem from="1681320356513" duration="666000" />
+    </task>
+    <task id="LOCAL-00001" summary="首次提交">
+      <created>1678726561405</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678726561406</updated>
+    </task>
+    <task id="LOCAL-00002" summary="临时提交">
+      <created>1678727476790</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1678727476790</updated>
+    </task>
+    <task id="LOCAL-00003" summary="删除临时文件">
+      <created>1678727745044</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1678727745044</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add temp file for creating folder">
+      <created>1678728117095</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1678728117095</updated>
+    </task>
+    <task id="LOCAL-00005" summary="add redis into docker-compose.yaml">
+      <created>1678899128444</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1678899128444</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix redis-cluster bug">
+      <created>1678985407718</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1678985407718</updated>
+    </task>
+    <task id="LOCAL-00007" summary="commit">
+      <created>1679330945208</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1679330945209</updated>
+    </task>
+    <task id="LOCAL-00008" summary="commit">
+      <created>1679332600625</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679332600625</updated>
+    </task>
+    <task id="LOCAL-00009" summary="fix mysql cnf can't read bug">
+      <created>1679939550310</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1679939550310</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fix mysql cnf permission bug">
+      <created>1680026105653</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1680026105653</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix mysql sh execute bug">
+      <created>1680543084371</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1680543084371</updated>
+    </task>
+    <task id="LOCAL-00012" summary="修改脚本文件格式">
+      <created>1680617952977</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1680617952977</updated>
+    </task>
+    <task id="LOCAL-00013" summary="新增模块和es">
+      <created>1680623017031</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1680623017031</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="首次提交" />
+    <MESSAGE value="临时提交" />
+    <MESSAGE value="删除临时文件" />
+    <MESSAGE value="add temp file for creating folder" />
+    <MESSAGE value="add redis into docker-compose.yaml" />
+    <MESSAGE value="fix redis-cluster bug" />
+    <MESSAGE value="commit" />
+    <MESSAGE value="fix mysql cnf can't read bug" />
+    <MESSAGE value="fix mysql cnf permission bug" />
+    <MESSAGE value="fix mysql sh execute bug" />
+    <MESSAGE value="修改脚本文件格式" />
+    <MESSAGE value="新增模块和es" />
+    <option name="LAST_COMMIT_MESSAGE" value="新增模块和es" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
